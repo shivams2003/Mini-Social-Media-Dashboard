@@ -3,7 +3,6 @@ import {
   Box,
   Flex,
   Avatar,
-  Text,
   Button,
   Menu,
   MenuButton,
@@ -36,12 +35,23 @@ const NavLink = ({ children }) => (
 
 export default function Nav() {
   const [colorMode, setColorMode] = useState('light');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleToggleColorMode = () => {
     setColorMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
     toggleColorMode();
+  };
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    // Perform actual login logic here (e.g., API calls)
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    // Perform actual logout logic here (e.g., clearing tokens, etc.)
   };
 
   return (
@@ -56,37 +66,41 @@ export default function Nav() {
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>
 
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  rounded={'full'}
-                  variant={'link'}
-                  cursor={'pointer'}
-                  minW={0}
-                >
-                  <Avatar
-                    size={'sm'}
-                    src={'https://avatars.dicebear.com/api/male/username.svg'}
-                  />
-                </MenuButton>
-                <MenuList alignItems={'center'}>
-                  <br />
-                  <Center>
+              {isLoggedIn ? (
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rounded={'full'}
+                    variant={'link'}
+                    cursor={'pointer'}
+                    minW={0}
+                  >
                     <Avatar
-                      size={'2xl'}
+                      size={'sm'}
                       src={'https://avatars.dicebear.com/api/male/username.svg'}
                     />
-                  </Center>
-                  <br />
-                  <Center>
-                    <p>Username</p>
-                  </Center>
-                  <br />
-                  <MenuDivider />
-                  <MenuItem>Account Settings</MenuItem>
-                  <MenuItem>Logout</MenuItem>
-                </MenuList>
-              </Menu>
+                  </MenuButton>
+                  <MenuList alignItems={'center'}>
+                    <br />
+                    <Center>
+                      <Avatar
+                        size={'2xl'}
+                        src={'https://avatars.dicebear.com/api/male/username.svg'}
+                      />
+                    </Center>
+                    <br />
+                    <Center>
+                      <p>Username</p>
+                    </Center>
+                    <br />
+                    <MenuDivider />
+                    <MenuItem>Account Settings</MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                  </MenuList>
+                </Menu>
+              ) : (
+                <Button onClick={handleLogin}>Login</Button>
+              )}
             </Stack>
           </Flex>
         </Flex>
